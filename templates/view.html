@@ -1,0 +1,169 @@
+<!-- cms/templates/cms/view_content.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Content List</title>
+    <style>
+        /* cms/static/css/styles.css */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            background-color: #f9f9f9;
+        }
+
+        
+
+        .container {
+            padding: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 20px 0;
+        }
+
+        img {
+            width: 200px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer; /* Change cursor to pointer for clickable images */
+        }
+
+        .content-info {
+            max-width: 600px;
+        }
+
+        .content-info h2 {
+            color: #007bff;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content-info p {
+            color: #555;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .content-info a.read-more {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .content-info a.read-more:hover {
+            text-decoration: underline;
+        }
+
+        .add-content-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .add-content-link:hover {
+            background-color: #0056b3;
+        }
+
+        /* Lightbox styles */
+        .lightbox {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox img {
+            width: 60%;
+            height: 70%;
+            margin: auto;
+            display: block;
+        }
+
+        .lightbox:target {
+            display: flex; /* Show lightbox when target */
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+ 
+
+    <div class="container">
+        <h1>Content List</h1>
+          
+        <!-- Your existing code to display contents -->
+        
+        <ul>
+            {% for content in contents %}
+            <li>
+                {% if content.image %}
+                <a href="#lightbox{{ content.id }}">
+                    <img src="{{ content.image.url }}" alt="{{ content.title }}">
+                </a>
+                {% endif %}
+                <div class="content-info">
+                    <h2>{{ content.title }}</h2>
+                    <p>{{ content.description|truncatewords:20 }}</p>
+                    <a href="{% url 'content_detail' content.id %}" class="read-more">Read More</a>
+                </div>
+            </li>
+
+            <!-- Lightbox modal for image -->
+            <div id="lightbox{{ content.id }}" class="lightbox">
+                <span class="lightbox-close" onclick="document.getElementById('lightbox{{ content.id }}').style.display='none'">&times;</span>
+                <img src="{{ content.image.url }}" alt="{{ content.title }}">
+            </div>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'add_content' %}" class="add-content-link">Add New Content</a>
+    </div>
+
+    <script>
+        // Close lightbox when clicking outside of the image
+        window.onclick = function(event) {
+            if (event.target.className === 'lightbox') {
+                event.target.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
