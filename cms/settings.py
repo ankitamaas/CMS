@@ -53,6 +53,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'cms.urls'
+# jhj
 
 TEMPLATES = [
     {
